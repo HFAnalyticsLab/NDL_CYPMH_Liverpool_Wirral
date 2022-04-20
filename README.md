@@ -1,2 +1,32 @@
-# NDL_CYPMH_Liverpool_Wirral
-Analysis by NDL Liverpool and Wirral on patterns in the use of mental health services among children and young people
+<img src="ndlbanner.png" width="405" height="96">
+
+# Networked Data Lab: NDL Liverpool and Wirral analysis on *[please fill in]*
+
+#### Project Status: Completed
+
+## Project Description
+
+- This Networked Data Lab analysis by the NDL lab in Liverpool and Wirral focusses on *[please fill in]*.
+
+## Data sources
+
+This analysis used the following data: *[please fill in]*
+
+- Data source 1
+- Data source 2
+- [External data source 1](www.google.com)
+- [External data source 2](www.google.com)
+
+## Requirements
+
+These scripts were written in *[please fill in]*.
+
+## Authors
+
+- Author 1 - [contact](name@domain.ac.uk)
+- Author 2 - [contact](name@domain.ac.uk)
+- Author 3 - [contact](name@domain.ac.uk)
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).

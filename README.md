@@ -2,11 +2,12 @@
 
 # Networked Data Lab: NDL Liverpool and Wirral analysis on *[please fill in]*
 
-#### Project Status: Completed
+#### Project Status: In-progress
 
 ## Project Description
 
 - This Networked Data Lab analysis by the NDL lab in Liverpool and Wirral focusses on *[please fill in]*.
+- Please note that these research outputs have not yet been peer-reviewed and should be treated as preliminary.
 
 ## Data sources
 

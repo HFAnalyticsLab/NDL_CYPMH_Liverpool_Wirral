@@ -11,12 +11,25 @@
 
 ## Data sources
 
-This analysis used the following data: *[please fill in]*
+This analysis used the following data: 
 
-- Data source 1
-- Data source 2
-- [External data source 1](www.google.com)
-- [External data source 2](www.google.com)
+- Secondary User Service (SUS) – used to extract data on hospital admissions
+- Emergency Care Dataset (ECDS) – used to extract data on A&E attendances
+- Mental health Service Data Set (MHSDS) – used to extracts referrals to and contacts with 
+Children and Adolescent Mental Health Services (CAMHS) and Adult Mental Health Services
+(AMHS). These we collectively refer to below as routine mental health services. These are 
+contacts with services that provide routine care for people suspected or diagnosed mental 
+health and wellbeing need, learning disabilities, autism, or other neurodevelopmental 
+conditions. They are distinct from emergency admissions or A&E attendances in the other 
+data sources, that may occur due to a crisis. 
+- Emergency hospital admissions for self-harm, alcohol, and substance abuse, eating disorders 
+and other mental health problems. (Extracted from SUS)
+- Attendance to A&E for self-harm, alcohol, and substance abuse, eating disorders. (Extracted 
+from ECDS)
+- Any referrals to Mental Health Services. (Extracted from MHSDS)
+- Any contacts Mental Health Services. (Extracted from MHSDS)
+- People with any contact with health services for a mental health problem – defined as any 
+person with at least one of the outcomes 1-4, during this period.
 
 ## How does it work?
 

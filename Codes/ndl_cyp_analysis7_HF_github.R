@@ -27,7 +27,7 @@ d <- fread("./topic2_github_material/dummy_CYPMH_data.csv")
 names(d)[47] <- 'New_LSOA'
 
 #get lsoa data and break by national quantiles
-lsoa_data<-fread("Data/lsoa_data_for_ccg.csv")
+lsoa_data<-fread("./lsoa_data_for_ccg.csv")
 lsoa_data[,natn_dec:= dplyr::ntile(-imd, 10)]
 lsoa_data[,natn_qunt:= dplyr::ntile(-imd, 5)]
 lsoa_data[,natn_terc:= dplyr::ntile(-imd, 3)]

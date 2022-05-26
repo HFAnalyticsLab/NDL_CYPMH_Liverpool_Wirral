@@ -33,9 +33,10 @@ from ECDS)
 person with at least one of the outcomes 1-4, during this period.
 
 ## How does it work?
-Counts for individual events were taken on a month-by-month basis for the period 2018-2021. Counts variables formed the basis of rates calculations in proportion to age-group populations per LSOA. 
-
-Regression analysis was undertaken by comparing rates for key indicators against the follow factors:
+Raw data is compiled and counts are taken for relevant events, including A&E attendances, hospital emergency admissions, referrals to and contacts with mental health services. 
+Counts for individual events are taken on a month-by-month basis for the period 2018-2021. Counts variables formed the basis of rates calculations in proportion to age-group populations per LSOA. 
+Relevant open-data indices are merged with the rates data by LSOA.
+Regression analysis is made by comparing events rates against these contextual rates:
 
 •	Lone parent 
 •	Access to green space
@@ -46,9 +47,9 @@ Regression analysis was undertaken by comparing rates for key indicators against
 
 ## Requirements
 
-•	These scripts were written in RStudio
+•	These scripts were written in R and can be run in RStudio
 •	Data are saved to .csv
-•	Geo-spatial boundaries are included here as .shp files These can be opened in QGIS but this is not necessary to run the analysis
+•	Geo-spatial LSOA boundaries are saved to .shp files
 
 
 ## Getting started

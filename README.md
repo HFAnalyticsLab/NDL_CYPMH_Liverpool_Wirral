@@ -58,7 +58,7 @@ All code for the analysis is included in the file 'ndl_cyp_analysis7_HF_github.R
 All relevant data are included in the same directory as the .R file
 Hitting the Run button in the menu should successfully compile data and run the analysis
 Please note that larger data sets could take a minute or longer to load
-Running the code will results in several new .csv tables and new .jpeg files being saved to the file
+Running the code will result in several new .csv tables and new .jpeg files being saved to the file
 
 
 ## Authors

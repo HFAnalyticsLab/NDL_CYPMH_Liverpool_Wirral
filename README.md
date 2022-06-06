@@ -14,7 +14,7 @@ Please note that these research outputs have not yet been peer-reviewed and shou
 
 This analysis used the following data: 
 
-•	Secondary User Service (SUS) – used to extract data on hospital admissions
+•	Secondary User Service (SUS) – used to extract data on hospital admissions <br />
 •	Emergency Care Dataset (ECDS) – used to extract data on A&E attendances
 •	Mental health Service Data Set (MHSDS) – used to extracts referrals to and contacts with 
 Children and Adolescent Mental Health Services (CAMHS) and Adult Mental Health Services
@@ -31,6 +31,8 @@ from ECDS)
 • Any contacts Mental Health Services. (Extracted from MHSDS)
 •	People with any contact with health services for a mental health problem – defined as any 
 person with at least one of the outcomes 1-4, during this period.
+
+Variables are defined the file 'variable_definitions.csv' which is included in the data bundle.
 
 ## How does it work?
 Raw data is compiled and counts are taken for relevant events, including A&E attendances, hospital emergency admissions, referrals to and contacts with mental health services. 

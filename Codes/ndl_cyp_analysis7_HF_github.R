@@ -255,10 +255,10 @@ lsoa_age2_sex <- lsoa_age2_sex[!is.na(lsoa_age2_sex$sex),]
 #create two age groups
 lsoa_pop[,  age_group2:=cut(age_cat, breaks=c(0,15,25), include.lowest=T, right=F)]
 #to account for person year - and half year in 2021 - only if needed
-lsoa_pop[, an_pop2:=an_pop]
-lsoa_pop[year==2021, an_pop2:=an_pop2/2]
+#lsoa_pop[, an_pop2:=an_pop]
+#lsoa_pop[year==2021, an_pop2:=an_pop2/2]
 #removed '&year == 2019' as 2020 needed for covid analysus
-pop_lsoa_sex<-lsoa_pop[age_cat<25 & (lsoa11 %in% liv_wir$LSOA11CD), list(an_pop=sum(an_pop2)), by=.(lsoa11, age_group2, sex)]
+pop_lsoa_sex<-lsoa_pop[age_cat<25 & (lsoa11 %in% liv_wir$LSOA11CD), list(an_pop=sum(an_pop)), by=.(lsoa11, age_group2, sex)]
 
 lsoa_age2_sex <- merge(pop_lsoa_sex, lsoa_age2_sex, by=c("lsoa11","age_group2", "sex"),all.x=T)
 

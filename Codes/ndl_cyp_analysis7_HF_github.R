@@ -36,11 +36,18 @@ d <- fread("./dummy_CYPMH_data_rand.csv")
 #get lsoa data 
 lsoa_data<-fread("./lsoa_data_for_ccg_edit.csv")
 
+#lsoa_data[,natn_dec:= dplyr::ntile(-imd, 10)]
+#lsoa_data[,natn_qunt:= dplyr::ntile(-imd, 5)]
+#lsoa_data[,natn_terc:= dplyr::ntile(-imd, 3)]
+#lsoa_data[,total:=anti_social_behaviour+burglary+criminal_damage_and_arson+robbery]
+#lsoa_data <- lsoa_data[,c(1,2,7:13,16,18,22:25,27,37,40,47, 49:51),]
+#fwrite(lsoa_data, 'lsoa_data_for_ccg_edit.csv')
 
 # load lsoa boundaries
-sp_lsoa <- st_read(normalizePath("./Wirral_Liverpool_LSOA_bnds.shp"))
-sp_lsoa <- sp_lsoa[sp_lsoa$LSOA11CD %in% lsoa_age2_sex$lsoa11, ]
-                      
+liv_wir <- st_read(normalizePath("./Wirral_Liverpool_LSOA_bnds.shp"))
+#liv_wir <- liv_wir[liv_wir$LSOA11CD %in% lsoa_age2_sex$lsoa11, ]
+
+#names(liv_wir)[1] <- 'lsoa11'          
                           
 #Liverpool & Wirral single year population (2019)
 lsoa_sy_pop<-fread("./liv_wir_sy_pop.csv")
@@ -57,18 +64,17 @@ d$YearMonth <- format(as.Date(d$YearMonth, format="%d/%m/%Y"))
 d[, year:=year(YearMonth)]
 d[, month:=month(YearMonth)]
 
-d[, year_month:=format(YearMonth,'%Y-%m')]
-
-
+#already in DUMMY data
+#d[, year_month:=format(YearMonth,'%Y-%m')]
 #add columns with totals for outpatients, A&E, and Admissions
-names(d[, 10:20])
-d[, tot_out:=rowSums(.SD, na.rm=T), .SDcols=10:20]
-names(d[, 10:13])
-d[, tot_ae:=rowSums(.SD, na.rm=T), .SDcols=10:13]
-sum(d$tot_ae)
-names(d[, 14:18])
-d[, tot_ad:=rowSums(.SD, na.rm=T), .SDcols=14:18]
-sum(d$tot_ad)
+#names(d[, 10:20])
+#d[, tot_out:=rowSums(.SD, na.rm=T), .SDcols=10:20]
+#names(d[, 10:13])
+#d[, tot_ae:=rowSums(.SD, na.rm=T), .SDcols=10:13]
+#sum(d$tot_ae)
+#names(d[, 14:18])
+#d[, tot_ad:=rowSums(.SD, na.rm=T), .SDcols=14:18]
+#sum(d$tot_ad)
 
 #derive variable that indicates the first contact in data set for each individual
 #earliest date with an outcome
@@ -197,7 +203,7 @@ age_sex_month<-d[year>2018 & is.na(New_sex)==F, list(ecds_eating_disorder=sum(ec
 ), by=.(age_group2, New_sex, year_month, year)]
 
 
-age_sex_month_pop<-pop2[lsoa11 %in% liv_wirral$lsoa11, list(an_pop=sum(an_pop)), by=.(age_group2,sex,year)]
+age_sex_month_pop<-pop2[lsoa11 %in% liv_wir$LSOA11CD, list(an_pop=sum(an_pop)), by=.(age_group2,sex,year)]
 
 age_sex_month<-merge(age_sex_month,age_sex_month_pop, by.y=c("age_group2","sex", "year"), by.x = c("age_group2","New_sex", "year"), all.x=T)
 
@@ -242,8 +248,9 @@ lsoa_age2_sex<-d[,list(ecds_eating_disorder=sum(ecds_eating_disorder, na.rm=T),
                        ad_em=sum(tot_ad,na.rm = T), 
                        ae=sum(tot_ae,na.rm = T),
                        fc_flag=sum(fc_flag,na.rm = T)
-), by=.(lsoa11=New_LSOA, age_group2, sex=New_sex)]
+), by=.(lsoa11=new_LSOA, age_group2, sex=New_sex)]
 
+lsoa_age2_sex <- lsoa_age2_sex[!is.na(lsoa_age2_sex$sex),]
 
 #create two age groups
 lsoa_pop[,  age_group2:=cut(age_cat, breaks=c(0,15,25), include.lowest=T, right=F)]
@@ -251,9 +258,10 @@ lsoa_pop[,  age_group2:=cut(age_cat, breaks=c(0,15,25), include.lowest=T, right=
 lsoa_pop[, an_pop2:=an_pop]
 lsoa_pop[year==2021, an_pop2:=an_pop2/2]
 #removed '&year == 2019' as 2020 needed for covid analysus
-pop_lsoa_sex<-lsoa_pop[age_cat<25 & (lsoa11 %in% liv_wirral$lsoa11), list(an_pop=sum(an_pop2)), by=.(lsoa11, age_group2, sex)]
+pop_lsoa_sex<-lsoa_pop[age_cat<25 & (lsoa11 %in% liv_wir$LSOA11CD), list(an_pop=sum(an_pop2)), by=.(lsoa11, age_group2, sex)]
 
-lsoa_age2_sex<-merge(pop_lsoa_sex, lsoa_age2_sex, by=c("lsoa11","age_group2", "sex"),all.x=T)
+lsoa_age2_sex <- merge(pop_lsoa_sex, lsoa_age2_sex, by=c("lsoa11","age_group2", "sex"),all.x=T)
+
 names(lsoa_age2_sex[, 4:18])
 # where there is no activity data in a cell - this should be zero not NA 
 lsoa_age2_sex[, 4:18][is.na(lsoa_age2_sex[, 4:18])] <- 0
@@ -314,7 +322,7 @@ imd_data<-lsoa_age2_sex[, list(ecds_eating_disorder=sum(ecds_eating_disorder, na
 ), by=.(natn_dec, natn_qunt, age_group2, sex)]
 
 
-
+#calculate rates
 imd_data[, rate_ed_ae:=ecds_eating_disorder*100/an_pop]
 imd_data[, rate_sh_ae:=ecds_self_harm*100/an_pop]
 imd_data[, rate_alc_ae:=ecds_alcohol*100/an_pop]
@@ -451,7 +459,7 @@ fwrite(imd_adm, "./national_imd_Figure_6_adm_by_reason_and_imd_DUMMY.csv")
 
 #maps
 
-rate_lsoa <- merge(sp_lsoa,lsoa_age2_sex[age_group2=="[15,25]" & sex=="Female",
+rate_lsoa <- merge(liv_wir,lsoa_age2_sex[age_group2=="[15,25]" & sex=="Female",
                                          .(lsoa11,time,rate_first, rate_contacts, rate_ae, rate_adem,rate_referrals, imd)],
                    by.x="LSOA11CD", by.y="lsoa11", all.x=T)
 
@@ -673,7 +681,7 @@ lsoa_pop[, age_group2:=cut(age_cat, breaks=c(0,15,25), include.lowest=T, right=F
 lsoa_pop[, age_group:=cut(age_cat, breaks=c(0,10,15,20,25), include.lowest=T, right=F)]
 #subset for <25YO
 pop_lsoa_age_month<-lsoa_pop[age_cat<25, list(an_pop=sum(an_pop)), by=.(lsoa11,year, age_group, age_group2,sex)]
-pop_lsoa_age_month<-pop_lsoa_age_month[lsoa11 %in% liv_wirral$lsoa11]
+pop_lsoa_age_month<-pop_lsoa_age_month[lsoa11 %in% liv_wir$LSOA11CD]
 
 #expand to include 12 months in each year
 pop_lsoa_age_month <- as.data.table(pop_lsoa_age_month[rep(1:.N, each=12),])
@@ -695,13 +703,17 @@ lsoa_age_month<-d[is.na(New_sex)==F, list(ecds_eating_disorder=sum(ecds_eating_d
                                                   ad_em=sum(tot_ad,na.rm = T), 
                                                   ae=sum(tot_ae,na.rm = T),
                                                   fc_flag=sum(fc_flag,na.rm = T)
-), by=.(New_LSOA,year, age_group, New_sex, month, year_month)]
+), by=.(new_LSOA,year, age_group, New_sex, month, year_month)]
+
+names(lsoa_age_month)[1] <- 'lsoa11'
 
 lsoa_age_month[, yearmon:=as.IDate(paste(year,month,1,sep="-"),"%Y-%m-%d")]
 #cut-off date
-lsoa_age_month<-merge(pop_lsoa_age_month[yearmon<as.IDate("2021-07-01")], lsoa_age_month, 
+
+
+lsoa_age_month <- merge(pop_lsoa_age_month[yearmon<as.IDate("2021-07-01")], lsoa_age_month, 
 by.x=c("lsoa11","year", "age_group", "sex", "yearmon"),
-by.y=c("New_LSOA","year", "age_group", "New_sex", "yearmon"),
+by.y=c("lsoa11","year", "age_group", "New_sex", "yearmon"),
 all.x=T)
 
 
@@ -720,7 +732,7 @@ centre<-function(x) {(x-mean(x,na.rm=T))/sd(x, na.rm=T)}
 cols<-c("CNI_Score","crime_rate","prop_ibesa",
            "imd","samhi_index","prop_white","prop_u16","prop_o75","gpperpop",
            "ed_dist","gpp_dist.x","green_pas",
-           "pm10_mean","prop_1less", "lone_parent", "cohab_child")
+           "lone_parent")
 
 lsoa_age_month[, (cols):=lapply(.SD, centre), .SDcols=cols]
 #date/time format
@@ -745,6 +757,7 @@ fwrite(out, "./lsoa_by_agegroup_sex_month_DUMMY.csv")
 #regressions data
 trend_d <- lsoa_age_month[an_pop>0]
 trend_d <- trend_d[!year <=  2017]
+
 
 lsoa_age_month[, sex:=factor(sex, labels = c("Male", "Female"))]
 

@@ -1,6 +1,8 @@
 #code for analysis of Children and Young People's Mental Health (Networked Data Lab Phase 2)
 #Public facing code makes use of a dummy data set, as well open-data sources
 
+#Variables are defined in the file 'variable_definitions.csv'
+
 #Running this code generates DUMMY figures and tables
 
 
@@ -31,19 +33,18 @@ library(cowplot)
 
 d <- fread("./dummy_CYPMH_data_rand.csv")
 
-#get lsoa data and break by national quantiles
-lsoa_data<-fread("./ccg_dummy_data.csv")
-lsoa_data[,natn_dec:= dplyr::ntile(-imd, 10)]
-lsoa_data[,natn_qunt:= dplyr::ntile(-imd, 5)]
-lsoa_data[,natn_terc:= dplyr::ntile(-imd, 3)]
+#get lsoa data 
+lsoa_data<-fread("./lsoa_data_for_ccg_edit.csv")
+
 
 # load lsoa boundaries
 sp_lsoa <- st_read(normalizePath("./Wirral_Liverpool_LSOA_bnds.shp"))
 sp_lsoa <- sp_lsoa[sp_lsoa$LSOA11CD %in% lsoa_age2_sex$lsoa11, ]
-
-
+                      
+                          
 #Liverpool & Wirral single year population (2019)
 lsoa_sy_pop<-fread("./liv_wir_sy_pop.csv")
+
 
 #tidy 
 d[New_age<0, New_age:=NA]
@@ -97,7 +98,7 @@ sy_outcomes<-d[is.na(New_sex)==F, list(ecds_eating_disorder=sum(ecds_eating_diso
 
 
 #single-year population table for 0-25YOs
-sy_pop<-lsoa_sy_pop[, list(an_pop=sum(value)), by=.(age,sex)]
+sy_pop<-lsoa_sy_pop[, list(an_pop=sum(count)), by=.(age,sex)]
 sy_outcomes<-merge(sy_pop[age<26],sy_outcomes, by.x=c("age","sex"), by.y = c("New_age","New_sex"), all.x=T)
 #missing age years should be zero
 sy_outcomes[is.na(sy_outcomes)]<-0
@@ -168,8 +169,9 @@ ggsave("./figure1a_ed_ip_DUMMY.png", width = 8, height = 6, units = 'in')
 dev.off()
 
 
-#age specific trends for two age groups
-lsoa_pop <- fread("./pop2017_2020__mf.csv")
+#annual population counts for age groups by LSOA
+lsoa_pop <- fread("./pop2018_2020__mf.csv")
+
 
 #collapse to same age categories as data
 lsoa_pop[,  age_group2:=cut(age_cat, breaks=c(0,15,25), include.lowest=T, right=F)]
